@@ -4,3 +4,8 @@ iplist.txt filter=git-crypt diff=git-crypt
 # The EKS kubeconfig files
 terraform/cloud-platform-eks/files/* filter=git-crypt diff=git-crypt
 terraform/cloud-platform-eks/cluster.tf filter=git-crypt diff=git-crypt
+
+# Local states should be encrypted. They are kept within the same git repository for the
+# creation of the initial S3/DynamoDB resources used to bootstrap an AWS Account
+*.tfstate
+*.tfstate.backup
