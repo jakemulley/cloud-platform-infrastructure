@@ -1,10 +1,10 @@
 
 terraform {
   backend "s3" {
-    bucket         = "ale-mogaal-test"
+    bucket         = "cloud-platform-ephemeral-test-tfstate"
     region         = "eu-west-2"
     key            = "global-resources/iam/terraform.tfstate"
-    dynamodb_table = "ale-mogaal-test"
+    dynamodb_table = "cloud-platform-ephemeral-test-tfstate"
     encrypt        = true
   }
 }
