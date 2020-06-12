@@ -43,114 +43,16 @@ locals {
   vpc                      = var.vpc_name == "" ? terraform.workspace : var.vpc_name
 }
 
-data "aws_vpc" "selected" {
-  filter {
-    name   = "tag:Name"
-    values = [local.vpc]
-  }
-}
+########
+# KOPS #
+########
 
-data "aws_subnet_ids" "private" {
-  vpc_id = data.aws_vpc.selected.id
+module "kops" {
+  source = "github.com/ministryofjustice/cloud-platform-terraform-auth0?ref=0.0.2"
 
-  tags = {
-    SubnetType = "Private"
-  }
-}
-
-data "aws_subnet_ids" "public" {
-  vpc_id = data.aws_vpc.selected.id
-
-  tags = {
-    SubnetType = "Utility"
-  }
-}
-
-# Unfortunately data.template_file.kops resource only receives individual subnets with the 
-# AZs already mapped. Since terraform 0.12 there is a better way to do it using templatefile 
-# ( https://www.terraform.io/docs/configuration/functions/templatefile.html ) and passing 
-# the whole array of subnets with AZ included, it will involve using a something like 
-# %{ for subnets in subnets_all ~} # inside the templates/kops.yaml.tpl. For this PR the 
-# idea is to change the least possible, following PRs will be coming to make it better.
-
-data "aws_subnet" "private_a" {
-  vpc_id            = data.aws_vpc.selected.id
-  availability_zone = "eu-west-2a"
-
-  tags = {
-    SubnetType = "Private"
-  }
-}
-
-data "aws_subnet" "private_b" {
-  vpc_id            = data.aws_vpc.selected.id
-  availability_zone = "eu-west-2b"
-
-  tags = {
-    SubnetType = "Private"
-  }
-}
-
-data "aws_subnet" "private_c" {
-  vpc_id            = data.aws_vpc.selected.id
-  availability_zone = "eu-west-2c"
-
-  tags = {
-    SubnetType = "Private"
-  }
-}
-
-data "aws_subnet" "public_a" {
-  vpc_id            = data.aws_vpc.selected.id
-  availability_zone = "eu-west-2a"
-
-  tags = {
-    SubnetType = "Utility"
-  }
-}
-
-data "aws_subnet" "public_b" {
-  vpc_id            = data.aws_vpc.selected.id
-  availability_zone = "eu-west-2b"
-
-  tags = {
-    SubnetType = "Utility"
-  }
-}
-
-data "aws_subnet" "public_c" {
-  vpc_id            = data.aws_vpc.selected.id
-  availability_zone = "eu-west-2c"
-
-  tags = {
-    SubnetType = "Utility"
-  }
-}
-
-
-# Modules
-module "cluster_dns" {
-  source                   = "../modules/cluster_dns"
-  cluster_base_domain_name = local.cluster_base_domain_name
+  cluster_base_domain_name = vpc_name
   parent_zone_id           = data.terraform_remote_state.global.outputs.cp_zone_id
 }
-
-module "cluster_ssl" {
-  source                   = "../modules/cluster_ssl"
-  cluster_base_domain_name = local.cluster_base_domain_name
-  dns_zone_id              = module.cluster_dns.cluster_dns_zone_id
-}
-
-resource "tls_private_key" "cluster" {
-  algorithm = "RSA"
-  rsa_bits  = "2048"
-}
-
-resource "aws_key_pair" "cluster" {
-  key_name   = local.cluster_base_domain_name
-  public_key = tls_private_key.cluster.public_key_openssh
-}
-
 
 #########
 # Auth0 #

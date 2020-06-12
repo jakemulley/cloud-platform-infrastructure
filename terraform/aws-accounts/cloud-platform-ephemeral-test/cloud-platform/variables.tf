@@ -5,7 +5,7 @@ variable "vpc_name" {
 
 variable "auth0_tenant_domain" {
   description = "This is the auth0 tenant domain"
-  value = "justice-cloud-platform.eu.auth0.com"
+  value       = "justice-cloud-platform.eu.auth0.com"
 }
 
 variable "cluster_node_count" {
