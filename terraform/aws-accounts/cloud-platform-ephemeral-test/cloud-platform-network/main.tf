@@ -25,7 +25,7 @@ provider "aws" {
 
 locals {
   vpc_name             = terraform.workspace
-  vpc_base_domain_name = "${local.vpc_name}.cloud-platform.service.justice.gov.uk"
+  vpc_base_domain_name = "${local.vpc_name}.${var.base_domain_name}"
   cluster_tags = {
     for name in var.cluster_names :
     "kubernetes.io/cluster/${name}" => "shared"
