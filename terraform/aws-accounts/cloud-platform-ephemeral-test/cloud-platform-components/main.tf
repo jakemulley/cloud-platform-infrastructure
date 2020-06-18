@@ -58,7 +58,7 @@ data "terraform_remote_state" "global" {
 
 // This is the kubernetes role that node hosts are assigned.
 data "aws_iam_role" "nodes" {
-  name = "nodes.${data.terraform_remote_state.cluster.outputs.cluster_base_domain_name}"
+  name = "nodes.${data.terraform_remote_state.cluster.outputs.cluster_domain_name}"
 }
 
 data "aws_caller_identity" "current" {}

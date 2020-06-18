@@ -48,21 +48,21 @@ locals {
 ########
 
 module "kops" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-kops"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-kops?ref=main"
 
-  vpc_name                 = local.vpc_name
-  cluster_base_domain_name = trimsuffix(local.cluster_base_domain_name, ".")
-  kops_state_store         = data.terraform_remote_state.global.outputs.kops_state_s3_bucket_name[0]
-  auth0_client_id          = module.auth0.oidc_kubernetes_client_id
-  # authorized_keys_manager  = module.bastion.authorized_keys_manager
-  authorized_keys_manager  = "niaco"
-  
+  vpc_name                = local.vpc_name
+  cluster_domain_name     = trimsuffix(local.cluster_base_domain_name, ".")
+  kops_state_store        = data.terraform_remote_state.global.outputs.kops_state_s3_bucket_name[0]
+  auth0_client_id         = module.auth0.oidc_kubernetes_client_id
+  authorized_keys_manager = module.bastion.authorized_keys_manager
+
   cluster_node_count       = lookup(var.cluster_node_count, terraform.workspace, var.cluster_node_count["default"])
   master_node_machine_type = lookup(var.master_node_machine_type, terraform.workspace, var.master_node_machine_type["default"])
   worker_node_machine_type = lookup(var.worker_node_machine_type, terraform.workspace, var.worker_node_machine_type["default"])
   enable_large_nodesgroup  = lookup(var.enable_large_nodesgroup, terraform.workspace, var.enable_large_nodesgroup["default"])
 
-  oidc_issuer_url          = "https://${var.auth0_tenant_domain}/"
+  template_path   = "../../../../kops"
+  oidc_issuer_url = "https://${var.auth0_tenant_domain}/"
 }
 
 #########
@@ -81,7 +81,7 @@ module "auth0" {
 ###########
 
 module "bastion" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-bastion?ref=reduced-variables"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-bastion?ref=1.1.0"
 
   vpc_name     = local.vpc_name
   route53_zone = aws_route53_zone.cluster.name
