@@ -51,6 +51,6 @@ module "kops_state_backend" {
 
 # New parent DNS zone for clusters
 resource "aws_route53_zone" "aws_account_hostzone_id" {
-  name = "ephemeral-test.cloud-platform.service.justice.gov.uk."
+  name = "et.cloud-platform.service.justice.gov.uk."
 }
 

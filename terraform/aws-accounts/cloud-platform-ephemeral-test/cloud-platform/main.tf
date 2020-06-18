@@ -48,7 +48,7 @@ locals {
 ########
 
 module "kops" {
-  source = "/Users/mogaal/workspace/github/ministryofjustice/cloud-platform-terraform-kops"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-kops"
 
   vpc_name                 = local.vpc_name
   cluster_base_domain_name = trimsuffix(local.cluster_base_domain_name, ".")
@@ -81,8 +81,7 @@ module "auth0" {
 ###########
 
 module "bastion" {
-  # source = "github.com/ministryofjustice/cloud-platform-terraform-bastion?ref=1.0.0"
-  source = "/Users/mogaal/workspace/github/ministryofjustice/cloud-platform-terraform-bastion"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-bastion?ref=reduced-variables"
 
   vpc_name     = local.vpc_name
   route53_zone = aws_route53_zone.cluster.name
@@ -108,7 +107,7 @@ resource "aws_key_pair" "vpc" {
 ################
 
 resource "aws_route53_zone" "cluster" {
-  name          = "${local.cluster_base_domain_name}."
+  name          = local.cluster_base_domain_name
   force_destroy = true
 }
 
