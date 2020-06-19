@@ -81,8 +81,7 @@ module "auth0" {
 ###########
 
 module "bastion" {
-  #source = "github.com/ministryofjustice/cloud-platform-terraform-bastion?ref=1.1.0"
-  source = "/Users/mogaal/workspace/github/ministryofjustice/cloud-platform-terraform-bastion"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-bastion?ref=1.2.0"
 
   vpc_name            = local.vpc_name
   route53_zone        = aws_route53_zone.cluster.name
