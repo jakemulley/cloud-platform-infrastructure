@@ -81,25 +81,12 @@ module "auth0" {
 ###########
 
 module "bastion" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-bastion?ref=1.1.0"
+  #source = "github.com/ministryofjustice/cloud-platform-terraform-bastion?ref=1.1.0"
+  source = "/Users/mogaal/workspace/github/ministryofjustice/cloud-platform-terraform-bastion"
 
-  vpc_name     = local.vpc_name
-  route53_zone = aws_route53_zone.cluster.name
-  key_name     = aws_key_pair.vpc.key_name
-}
-
-############
-# Key Pair #
-############
-
-resource "tls_private_key" "vpc" {
-  algorithm = "RSA"
-  rsa_bits  = "2048"
-}
-
-resource "aws_key_pair" "vpc" {
-  key_name   = local.cluster_base_domain_name
-  public_key = tls_private_key.vpc.public_key_openssh
+  vpc_name            = local.vpc_name
+  route53_zone        = aws_route53_zone.cluster.name
+  cluster_domain_name = local.cluster_base_domain_name
 }
 
 ################
