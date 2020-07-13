@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Remove files before linting
         run: | 
+          ls
           find . -iname *.tfvars -exec rm -rf {} \;
           rm -rf terraform/cloud-platform-eks/cluster.tf 
       - name: Lint Code Base
