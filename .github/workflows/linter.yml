@@ -18,7 +18,9 @@ jobs:
         run: | 
           ls terraform/cloud-platform-eks/cluster.tf
           rm -rf terraform/cloud-platform-eks/cluster.tf 
-          ls terraform/cloud-platform-eks/cluster.tf
+      - name: Test files were removed
+        run: | 
+          ls terraform/cloud-platform-eks/
       - name: Lint Code Base
         uses: docker://github/super-linter:v3.1.0
         env:
