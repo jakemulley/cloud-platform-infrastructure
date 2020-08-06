@@ -13,3 +13,7 @@ output "aws_account_hostzone_id" {
 output "aws_account_hostzone_name" {
   value = aws_route53_zone.aws_account_hostzone_id.name
 }
+
+output "baselines_logging_buckets" {
+  value = module.baselines.logging_buckets
+}

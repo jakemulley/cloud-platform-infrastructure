@@ -16,10 +16,13 @@ data "aws_caller_identity" "current" {}
 ###########################
 
 module "baselines" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-awsaccounts-baselines?ref=master"
+  #source = "github.com/ministryofjustice/cloud-platform-terraform-awsaccounts-baselines?ref=master"
+  source = "/home/mogaal/workspace/github/ministryofjustice/cloud-platform-terraform-awsaccounts-baselines"
 
   account_name = var.aws_account_name
-  region           = var.aws_region
+  region       = var.aws_region
+
+  enable_logging = true
   slack_webhook    = var.baselines_alerts_slack_webhook
   slack_channel    = var.baselines_alerts_slack_channel
 }
@@ -28,11 +31,11 @@ module "baselines" {
 # IAM #
 #######
 
-module "iam" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-awsaccounts-iam?ref=0.0.1"
-
-  aws_account_name = var.aws_account_name
-}
+#module "iam" {
+#  source = "github.com/ministryofjustice/cloud-platform-terraform-awsaccounts-iam?ref=0.0.1"
+#
+#  aws_account_name = var.aws_account_name
+#}
 
 ##############
 # kOps State #
